@@ -18,7 +18,7 @@ Available states
 ``rider``
 ------------
 
-Downloads the archive from Jetbrains phpsite, unpacks locally and installs the IDE on the Operating System.  Places a environment profile in /etc/profile.d - this way the PATH is set correctly for all system users.
+Downloads the archive from Jetbrains website, unpacks locally and installs the IDE on the Operating System.  Places a environment profile in /etc/profile.d - this way the PATH is set correctly for all system users.
 
 .. note::
 

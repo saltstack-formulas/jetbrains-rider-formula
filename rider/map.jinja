@@ -34,12 +34,12 @@
 {% if grains.os == 'MacOS' or ide.jetbrains.edition in ('None') %}
    {%- set pcode = ide.jetbrains.product %}
 {% else %}
-   {%- set pcode = pcode ~ ide.jetbrains.edition if ide.jetbrains.edition %}
+   {%- set pcode = pcode ~ ide.jetbrains.edition %}
 {% endif %}
 {%- set jdata = salt['cmd.run']('curl {0} {1}{2}'.format(ide.dl.opts, ide.jetbrains.uri, pcode))|load_yaml %}
 
 {% if grains.os == 'MacOS' %}
-  {% set _home = '{0}.app/Contents/MacOS'.format(ide.prefix) %}
+  {% set _home = '{0} {1}.app/Contents/MacOS'.format(ide.prefix, jdata[ pcode ][0]['majorVersion']) %}
 {% elif ide.jetbrains.edition %} 
   {% set _home = '{0}/rider-{1}-{2}'.format( ide.prefix, ide.jetbrains.edition, jdata[ pcode ][0]['version']) %}
 {% else %}
