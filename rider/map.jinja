@@ -1,0 +1,64 @@
+# -*- coding: utf-8 -*-
+# vim: ft=jinja
+
+# Start with defaults from defs.yaml 
+{% import_yaml 'rider/defaults.yaml' as defs %}
+
+# Set OS deviations from defaults 
+{% set osmap = salt['grains.filter_by']({
+
+        'MacOS':  { 'prefix' : '/Applications/Rider',
+                    'homes'  : '/Users',
+                    'command': '/rider',
+                    'osflavour': 'mac',
+        },
+        'Windows':{ 'prefix' : 'C:\\Program files',
+                    'homes'  : 'C:\\Users',
+                    'command': '\\rider.exe',
+                    'symlink': 'C:\\rider\\rider',
+                    'symhome': 'C:\\rider',
+                    'osflavour': 'windows',
+        },
+  }
+  , grain="os"
+  , merge=defs
+  , base="rider"
+ )
+%}
+
+# Merge osmap onto default settings before merging pillars.
+{% do defs.rider.update(osmap) %}
+{% set ide = salt['pillar.get']( 'rider', default=defs.rider, merge=True) %}
+
+# Set Jetbrains IDE latest release details
+{% if grains.os == 'MacOS' or ide.jetbrains.edition in ('None') %}
+   {%- set pcode = ide.jetbrains.product %}
+{% else %}
+   {%- set pcode = pcode ~ ide.jetbrains.edition if ide.jetbrains.edition %}
+{% endif %}
+{%- set jdata = salt['cmd.run']('curl {0} {1}{2}'.format(ide.dl.opts, ide.jetbrains.uri, pcode))|load_yaml %}
+
+{% if grains.os == 'MacOS' %}
+  {% set _home = '{0}.app/Contents/MacOS'.format(ide.prefix) %}
+{% elif ide.jetbrains.edition %} 
+  {% set _home = '{0}/rider-{1}-{2}'.format( ide.prefix, ide.jetbrains.edition, jdata[ pcode ][0]['version']) %}
+{% else %}
+  {% set _home = '{0}/rider-{1}'.format( ide.prefix, jdata[ pcode ][0]['version']) %}
+{% endif %}
+
+{% do ide.alt.update({ 'realhome': _home, 'realcmd': _home ~ ide.command },) %}
+
+# Set Jetbrains IDE download details
+{%- set src_hashurl = jdata[ pcode ][0]['downloads'][ ide.osflavour ]['checksumLink'] %}
+{%- set src_hashsum  = salt['cmd.run']('curl -s {0}'.format( src_hashurl )).split(' ')[0] %}
+{% do ide.dl.update({
+       'source_url'  : jdata[ pcode ][0]['downloads'][ ide.osflavour ]['link'],
+       'archive_name': jdata[ pcode ][0]['downloads'][ ide.osflavour ]['link'].split('/') | last ,
+       'src_hashurl' : src_hashurl,
+       'src_hashsum' : src_hashsum,
+       'unpack_opts' : ' -z -C ' ~  _home ~ ' --strip-components=1' },
+    )
+%}
+
+{% set rider = ide %}
+

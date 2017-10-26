@@ -1,0 +1,8 @@
+name: Rider
+os: gnu-linux, MacOS, Windows
+os_family: RedHat, Debian, Suse, FreeBSD, Archlinux, MacOS
+version: 201710
+release: 1
+minimum_version: 2016.3
+summary: Formula for installing Jetbrains Rider
+description: Formula for installing Jetbrains Rider IDE for .NET developers
