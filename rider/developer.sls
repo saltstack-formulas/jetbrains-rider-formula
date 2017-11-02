@@ -1,6 +1,6 @@
 {% from "rider/map.jinja" import rider with context %}
 
-{% if rider.prefs.user not in (None, 'undefined_user') %}
+{% if rider.prefs.user not in (None, 'undfined', 'undefined_user') %}
 
   {% if grains.os == 'MacOS' %}
 rider-desktop-shortcut-clean:
@@ -20,15 +20,17 @@ rider-desktop-shortcut-add:
     - context:
       user: {{ rider.prefs.user }}
       homes: {{ rider.homes }}
+      edition: {{ rider.jetbrains.edition }}
   cmd.run:
     - name: /tmp/mac_shortcut.sh {{ rider.jetbrains.edition }}
     - runas: {{ rider.prefs.user }}
     - require:
       - file: rider-desktop-shortcut-add
    {% else %}
+   #Linux
   file.managed:
     - source: salt://rider/files/rider.desktop
-    - name: {{ rider.homes }}/{{ rider.prefs.user }}/Desktop/rider.desktop
+    - name: {{ rider.homes }}/{{ rider.prefs.user }}/Desktop/rider{{ rider.jetbrains.edition }}.desktop
     - user: {{ rider.prefs.user }}
     - makedirs: True
       {% if salt['grains.get']('os_family') in ('Suse') %} 
@@ -39,35 +41,35 @@ rider-desktop-shortcut-add:
     - mode: 644
     - force: True
     - template: jinja
-    - onlyif: test -f {{ rider.symhome }}/{{ rider.command }}
+    - onlyif: test -f {{ rider.jetbrains.realcmd }}
     - context:
-      home: {{ rider.symhome }}
+      home: {{ rider.jetbrains.realhome }}
       command: {{ rider.command }}
    {% endif %}
 
 
-  {% if rider.prefs.importurl or rider.prefs.importdir %}
+  {% if rider.prefs.jarurl or rider.prefs.jardir %}
 
 rider-prefs-importfile:
-   {% if rider.prefs.importdir %}
+   {% if rider.prefs.jardir %}
   file.managed:
-    - onlyif: test -f {{ rider.prefs.importdir }}/{{ rider.prefs.myfile }}
-    - name: {{ rider.homes }}/{{ rider.prefs.user }}/{{ rider.prefs.myfile }}
-    - source: {{ rider.prefs.importdir }}/{{ rider.prefs.myfile }}
+    - onlyif: test -f {{ rider.prefs.jardir }}/{{ rider.prefs.jarfile }}
+    - name: {{ rider.homes }}/{{ rider.prefs.user }}/{{ rider.prefs.jarfile }}
+    - source: {{ rider.prefs.jardir }}/{{ rider.prefs.jarfile }}
     - user: {{ rider.prefs.user }}
     - makedirs: True
-        {% if salt['grains.get']('os_family') in ('Suse') %}
+        {% if grains.os_family in ('Suse') %}
     - group: users
         {% elif grains.os not in ('MacOS') %}
         #inherit Darwin ownership
     - group: {{ rider.prefs.user }}
         {% endif %}
-    - if_missing: {{ rider.homes }}/{{ rider.prefs.user }}/{{ rider.prefs.myfile }}
+    - if_missing: {{ rider.homes }}/{{ rider.prefs.user }}/{{ rider.prefs.jarfile }}
    {% else %}
   cmd.run:
-    - name: curl -o {{rider.homes}}/{{rider.prefs.user}}/{{rider.prefs.myfile}} {{rider.prefs.importurl}}
+    - name: curl -o {{rider.homes}}/{{rider.prefs.user}}/{{rider.prefs.jarfile}} {{rider.prefs.jarurl}}
     - runas: {{ rider.prefs.user }}
-    - if_missing: {{ rider.homes }}/{{ rider.prefs.user }}/{{ rider.prefs.myfile }}
+    - if_missing: {{ rider.homes }}/{{ rider.prefs.user }}/{{ rider.prefs.jarfile }}
    {% endif %}
 
   {% endif %}

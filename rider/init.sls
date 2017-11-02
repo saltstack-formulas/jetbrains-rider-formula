@@ -5,16 +5,14 @@ rider-remove-prev-archive:
   file.absent:
     - name: '{{ rider.tmpdir }}/{{ rider.dl.archive_name }}'
     - require_in:
-      - rider-install-dir
+      - rider-extract-dirs
 
-rider-install-dir:
+rider-extract-dirs:
   file.directory:
     - names:
-      - '{{ rider.alt.realhome }}'
       - '{{ rider.tmpdir }}'
 {% if grains.os not in ('MacOS', 'Windows') %}
-      - '{{ rider.prefix }}'
-      - '{{ rider.symhome }}'
+      - '{{ rider.jetbrains.realhome }}'
     - user: root
     - group: root
     - mode: 755
@@ -31,19 +29,6 @@ rider-download-archive:
         attempts: {{ rider.dl.retries }}
         interval: {{ rider.dl.interval }}
       {% endif %}
-
-{% if grains.os not in ('MacOS') %}
-rider-unpacked-dir:
-  file.directory:
-    - name: '{{ rider.alt.realhome }}'
-    - user: root
-    - group: root
-    - mode: 755
-    - makedirs: True
-    - force: True
-    - onchanges:
-      - cmd: rider-download-archive
-{% endif %}
 
 {%- if rider.dl.src_hashsum %}
    # Check local archive using hashstring for older Salt / MacOS.
@@ -71,13 +56,14 @@ rider-package-install:
     - force: True
     - allow_untrusted: True
 {% else %}
+  # Linux
   archive.extracted:
     - source: 'file://{{ rider.tmpdir }}/{{ rider.dl.archive_name }}'
-    - name: '{{ rider.alt.realhome }}'
+    - name: '{{ rider.jetbrains.realhome }}'
     - archive_format: {{ rider.dl.archive_type }}
        {% if grains['saltversioninfo'] < [2016, 11, 0] %}
     - tar_options: {{ rider.dl.unpack_opts }}
-    - if_missing: '{{ rider.alt.realcmd }}'
+    - if_missing: '{{ rider.jetbrains.realcmd }}'
        {% else %}
     - options: {{ rider.dl.unpack_opts }}
        {% endif %}
@@ -95,36 +81,14 @@ rider-package-install:
 
 rider-remove-archive:
   file.absent:
-    - names:
-      # todo: maybe just delete the tmpdir itself
-      - '{{ rider.tmpdir }}/{{ rider.dl.archive_name }}'
-      - '{{ rider.tmpdir }}/{{ rider.dl.archive_name }}.sha256'
+    - name: '{{ rider.tmpdir }}'
     - onchanges:
 {%- if grains.os in ('Windows') %}
       - pkg: rider-package-install
 {%- elif grains.os in ('MacOS') %}
       - macpackage: rider-package-install
 {% else %}
+      #Unix
       - archive: rider-package-install
-
-rider-home-symlink:
-  file.symlink:
-    - name: '{{ rider.symhome }}'
-    - target: '{{ rider.alt.realhome }}'
-    - force: True
-    - onchanges:
-      - archive: rider-package-install
-
-# Update system profile with PATH
-rider-config:
-  file.managed:
-    - name: /etc/profile.d/rider.sh
-    - source: salt://rider/files/rider.sh
-    - template: jinja
-    - mode: 644
-    - user: root
-    - group: root
-    - context:
-      rider_home: '{{ rider.symhome }}'
 
 {% endif %}

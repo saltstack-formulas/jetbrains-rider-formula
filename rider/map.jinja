@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vim: ft=jinja
 
-# Start with defaults from defs.yaml 
+# Start with defaults from defaults.yaml 
 {% import_yaml 'rider/defaults.yaml' as defs %}
 
 # Set OS deviations from defaults 
@@ -14,15 +14,11 @@
         },
         'Windows':{ 'prefix' : 'C:\\Program files',
                     'homes'  : 'C:\\Users',
+                    'tmpdir' : 'C:\\temp\\jetbrainstmp\\',
                     'command': '\\rider.exe',
-                    'symlink': 'C:\\rider\\rider',
-                    'symhome': 'C:\\rider',
                     'osflavour': 'windows',
         },
-  }
-  , grain="os"
-  , merge=defs
-  , base="rider"
+  }, grain="os", merge=defs, base="rider"
  )
 %}
 
@@ -45,10 +41,9 @@
 {% else %}
   {% set _home = '{0}/rider-{1}'.format( ide.prefix, jdata[ pcode ][0]['version']) %}
 {% endif %}
+{% do ide.jetbrains.update({ 'realhome': _home, 'realcmd': _home ~ ide.command },) %}
 
-{% do ide.alt.update({ 'realhome': _home, 'realcmd': _home ~ ide.command },) %}
-
-# Set Jetbrains IDE download details
+# Set download sources
 {%- set src_hashurl = jdata[ pcode ][0]['downloads'][ ide.osflavour ]['checksumLink'] %}
 {%- set src_hashsum  = salt['cmd.run']('curl -s {0}'.format( src_hashurl )).split(' ')[0] %}
 {% do ide.dl.update({
@@ -59,6 +54,5 @@
        'unpack_opts' : ' -z -C ' ~  _home ~ ' --strip-components=1' },
     )
 %}
-
 {% set rider = ide %}
 
