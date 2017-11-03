@@ -1,6 +1,6 @@
 {% from "rider/map.jinja" import rider with context %}
 
-{% if rider.prefs.user not in (None, 'undfined', 'undefined_user') %}
+{% if rider.prefs.user not in (None, 'undefined_user', 'undefined', '') %}
 
   {% if grains.os == 'MacOS' %}
 rider-desktop-shortcut-clean:
@@ -33,7 +33,7 @@ rider-desktop-shortcut-add:
     - name: {{ rider.homes }}/{{ rider.prefs.user }}/Desktop/rider{{ rider.jetbrains.edition }}.desktop
     - user: {{ rider.prefs.user }}
     - makedirs: True
-      {% if salt['grains.get']('os_family') in ('Suse') %} 
+      {% if salt['grains.get']('os_family') in ('Suse',) %} 
     - group: users
       {% else %}
     - group: {{ rider.prefs.user }}
@@ -58,9 +58,9 @@ rider-prefs-importfile:
     - source: {{ rider.prefs.jardir }}/{{ rider.prefs.jarfile }}
     - user: {{ rider.prefs.user }}
     - makedirs: True
-        {% if grains.os_family in ('Suse') %}
+        {% if grains.os_family in ('Suse',) %}
     - group: users
-        {% elif grains.os not in ('MacOS') %}
+        {% elif grains.os not in ('MacOS',) %}
         #inherit Darwin ownership
     - group: {{ rider.prefs.user }}
         {% endif %}

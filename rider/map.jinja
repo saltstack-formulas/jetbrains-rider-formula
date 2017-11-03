@@ -27,7 +27,7 @@
 {% set ide = salt['pillar.get']( 'rider', default=defs.rider, merge=True) %}
 
 # Set Jetbrains IDE latest release details
-{% if grains.os == 'MacOS' or ide.jetbrains.edition in ('None') %}
+{% if grains.os == 'MacOS' or ide.jetbrains.edition in ('None',) %}
    {%- set pcode = ide.jetbrains.product %}
 {% else %}
    {%- set pcode = pcode ~ ide.jetbrains.edition %}

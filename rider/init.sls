@@ -11,7 +11,7 @@ rider-extract-dirs:
   file.directory:
     - names:
       - '{{ rider.tmpdir }}'
-{% if grains.os not in ('MacOS', 'Windows') %}
+{% if grains.os not in ('MacOS', 'Windows',) %}
       - '{{ rider.jetbrains.realhome }}'
     - user: root
     - group: root
@@ -33,7 +33,7 @@ rider-download-archive:
 {%- if rider.dl.src_hashsum %}
    # Check local archive using hashstring for older Salt / MacOS.
    # (see https://github.com/saltstack/salt/pull/41914).
-  {%- if grains['saltversioninfo'] <= [2016, 11, 6] or grains.os in ('MacOS') %}
+  {%- if grains['saltversioninfo'] <= [2016, 11, 6] or grains.os in ('MacOS',) %}
 rider-check-archive-hash:
    module.run:
      - name: file.check_hash
@@ -83,9 +83,9 @@ rider-remove-archive:
   file.absent:
     - name: '{{ rider.tmpdir }}'
     - onchanges:
-{%- if grains.os in ('Windows') %}
+{%- if grains.os in ('Windows',) %}
       - pkg: rider-package-install
-{%- elif grains.os in ('MacOS') %}
+{%- elif grains.os in ('MacOS',) %}
       - macpackage: rider-package-install
 {% else %}
       #Unix

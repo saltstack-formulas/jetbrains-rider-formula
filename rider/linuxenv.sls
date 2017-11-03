@@ -1,6 +1,6 @@
 {% from "rider/map.jinja" import rider with context %}
 
-{% if grains.os not in ('MacOS', 'Windows') %}
+{% if grains.os not in ('MacOS', 'Windows',) %}
 
 rider-home-symlink:
   file.symlink:
@@ -22,7 +22,8 @@ rider-config:
       home: '{{ rider.jetbrains.home }}/rider'
 
   # Debian alternatives
-  {% if grains.os_family not in ('Arch') %}
+  {% if rider.linux.altpriority > 0 %}
+     {% if grains.os_family not in ('Arch',) %}
 
 # Add rider-home to alternatives system
 rider-home-alt-install:
@@ -57,6 +58,7 @@ rider-alt-set:
     - onchanges:
       - alternatives: rider-alt-install
 
+      {% endif %}
   {% endif %}
 
 {% endif %}
