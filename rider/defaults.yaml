@@ -1,7 +1,7 @@
 #Default Look Dictionary
 
 rider:
-  prefix: /usr/lib/jetbrains
+  prefix: /usr/local/jetbrains
   tmpdir: /tmp/jetbrainstmp
   command: /bin/rider.sh
   homes: /home
