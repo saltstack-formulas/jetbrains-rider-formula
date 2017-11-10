@@ -18,6 +18,7 @@ rider-extract-dirs:
     - mode: 755
 {% endif %}
     - makedirs: True
+    - clean: True
     - require_in:
       - rider-download-archive
 
