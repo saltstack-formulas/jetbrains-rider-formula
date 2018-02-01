@@ -5,6 +5,9 @@
 
 {% import_yaml 'rider/defaults.yaml' as defs %}
 {% set osmap = salt['grains.filter_by']({
+        'default':{
+        },
+
         'MacOS':  { 'prefix' : '/Applications/Rider',
                     'homes'  : '/Users',
                     'command': '/rider',
@@ -20,6 +23,12 @@
 ) %}
 {% do defs.rider.update(osmap) %}
 {% set ide = salt['pillar.get']( 'rider', default=defs.rider, merge=True) %}
+
+# Get user's group name from pillar or 'id' command
+{%- if not ide.prefs.group %}
+  {%- set usergroup = salt['cmd.run']('id -gn', runas=ide.prefs.user, output_loglevel='quiet',) or None %}
+  {%- do ide.prefs.update({'group': usergroup,}) %}
+{% endif %}
 
 # Get dynamic release metadata
 {%- set pcode = pcode ~ ide.jetbrains.edition %}
