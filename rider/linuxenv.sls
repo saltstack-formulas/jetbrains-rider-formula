@@ -21,9 +21,8 @@ rider-config:
     - context:
       home: '{{ rider.jetbrains.home }}/rider'
 
-  # Debian alternatives
-  {% if rider.linux.altpriority > 0 %}
-     {% if grains.os_family not in ('Arch',) %}
+  # Linux alternatives
+  {% if rider.linux.altpriority > 0 and grains.os_family not in ('Arch',) %}
 
 # Add rider-home to alternatives system
 rider-home-alt-install:
@@ -35,12 +34,12 @@ rider-home-alt-install:
 
 rider-home-alt-set:
   alternatives.set:
-    - name: riderhome
+    - name: rider-home
     - path: {{ rider.jetbrains.realhome }}
     - onchanges:
       - alternatives: rider-home-alt-install
 
-# Add intelli to alternatives system
+# Add to alternatives system
 rider-alt-install:
   alternatives.install:
     - name: rider
@@ -58,7 +57,6 @@ rider-alt-set:
     - onchanges:
       - alternatives: rider-alt-install
 
-      {% endif %}
   {% endif %}
 
 {% endif %}
