@@ -1,0 +1,13 @@
+
+MacOS:
+  prefix: '/Applications/Rider'
+  homes: '/Users'
+  command: '/rider'
+  osflavour: 'mac'
+
+Windows:
+  prefix: 'C:\\Program files\\Jetbrains\\Rider'
+  homes: 'C:\\Users'
+  tmpdir: 'C:\\temp\\jetbrainstmp\\'
+  command: '\\rider.exe'
+  osflavour: 'windows'
