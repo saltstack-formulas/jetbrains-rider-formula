@@ -59,4 +59,17 @@ rider-alt-set:
 
   {% endif %}
 
+  {% if rider.linux.install_desktop_file %}
+rider-global-desktop-file:
+  file.managed:
+    - name: {{ rider.linux.desktop_file }}
+    - source: salt://rider/files/rider.desktop
+    - template: jinja
+    - context:
+      home: {{ rider.jetbrains.realhome }}
+      command: {{ rider.command }}
+      edition: {{ rider.jetbrains.edition }}
+    - onlyif: test -f {{ rider.jetbrains.realhome }}/{{ rider.command }}
+  {% endif %}
+
 {% endif %}

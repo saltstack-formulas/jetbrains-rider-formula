@@ -6,6 +6,11 @@ rider:
     #Enable Debian alternatives feature by setting nonzero 'altpriority' value here.
     #Increase same value on each subsequent software installation.
     altpriority: 0
+
+    #On freedesktop.org-compliant desktops, enable Icon on Linux launchers.
+    #Place a .desktop file in e.g. /usr/share/applications (default is True)
+    install_desktop_file: True
+    desktop_file: /usr/share/applications/rider.desktop
   prefs:
     user: undefined_user
     #group:
@@ -13,4 +18,4 @@ rider:
     jarurl:
     jardir:
     jarfile: rider-settings.jar
- 
+

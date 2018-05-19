@@ -12,7 +12,7 @@ rider:
     uri: https://data.services.jetbrains.com/products/releases?latest=true&code=
     #See https://www.jetbrains.com/help/rider/Introduction.html
     #Default is Rider
-    product: RD 
+    product: RD
     edition:
 
   dl:
@@ -28,6 +28,11 @@ rider:
     symlink: /usr/bin/rider
     #debian alternatives is disabled by default. Activated via pillar value.
     altpriority: 0
+
+    #On freedesktop.org-compliant desktops, enable Icon on Linux launchers.
+    #Place a .desktop file in e.g. /usr/share/applications
+    install_desktop_file: True
+    desktop_file: /usr/share/applications/rider.desktop
 
   prefs:
     user:
