@@ -31,6 +31,9 @@ rider-home-alt-install:
     - link: '{{ rider.jetbrains.home }}/rider'
     - path: '{{ rider.jetbrains.realhome }}'
     - priority: {{ rider.linux.altpriority }}
+    - retry:
+        attempts: 2
+        until: True
 
 rider-home-alt-set:
   alternatives.set:
@@ -38,6 +41,9 @@ rider-home-alt-set:
     - path: {{ rider.jetbrains.realhome }}
     - onchanges:
       - alternatives: rider-home-alt-install
+    - retry:
+        attempts: 2
+        until: True
 
 # Add to alternatives system
 rider-alt-install:
@@ -49,6 +55,9 @@ rider-alt-install:
     - require:
       - alternatives: rider-home-alt-install
       - alternatives: rider-home-alt-set
+    - retry:
+        attempts: 2
+        until: True
 
 rider-alt-set:
   alternatives.set:
@@ -56,6 +65,9 @@ rider-alt-set:
     - path: {{ rider.jetbrains.realcmd }}
     - onchanges:
       - alternatives: rider-alt-install
+    - retry:
+        attempts: 2
+        until: True
 
   {% endif %}
 
