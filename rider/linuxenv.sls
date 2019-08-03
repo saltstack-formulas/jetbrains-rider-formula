@@ -19,7 +19,7 @@ rider-config:
     - user: root
     - group: root
     - context:
-      home: '{{ rider.jetbrains.home }}/rider'
+      home: '{{ rider.jetbrains.home|json }}/rider'
 
   # Linux alternatives
   {% if rider.linux.altpriority > 0 and grains.os_family not in ('Arch',) %}
@@ -78,9 +78,9 @@ rider-global-desktop-file:
     - source: salt://rider/files/rider.desktop
     - template: jinja
     - context:
-      home: {{ rider.jetbrains.realhome }}
-      command: {{ rider.command }}
-      edition: {{ rider.jetbrains.edition }}
+      home: {{ rider.jetbrains.realhome|json }}
+      command: {{ rider.command|json }}
+      edition: {{ rider.jetbrains.edition|json }}
     - onlyif: test -f {{ rider.jetbrains.realhome }}/{{ rider.command }}
   {% endif %}
 
