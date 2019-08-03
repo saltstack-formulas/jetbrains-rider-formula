@@ -16,9 +16,9 @@ rider-desktop-shortcut-add:
     - mode: 755
     - template: jinja
     - context:
-      user: {{ rider.prefs.user }}
-      homes: {{ rider.homes }}
-      edition: {{ rider.jetbrains.edition }}
+      user: {{ rider.prefs.user|json }}
+      homes: {{ rider.homes|json }}
+      edition: {{ rider.jetbrains.edition|json }}
     - onlyif: test "`uname`" = "Darwin"
   cmd.run:
     - name: /tmp/mac_shortcut.sh {{ rider.jetbrains.edition }}
@@ -43,9 +43,8 @@ rider-desktop-shortcut-install:
     - template: jinja
     - onlyif: test -f {{ rider.jetbrains.realcmd }}
     - context:
-      home: {{ rider.jetbrains.realhome }}
-      command: {{ rider.command }}
-
+      home: {{ rider.jetbrains.realhome|json }}
+      command: {{ rider.command|json }}
 
   {% if rider.prefs.jarurl or rider.prefs.jardir %}
 
