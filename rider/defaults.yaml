@@ -1,43 +1,60 @@
-#Default Look Dictionary
-
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+---
 rider:
-  prefix: /usr/local/jetbrains
-  tmpdir: /tmp/jetbrainstmp
+  product: RD
+  edition: ''
+  flavour: linux
+  release: latest
+  version: latest
+
   command: /bin/rider.sh
-  homes: /home
-  osflavour: linux
+  config_file: None
+  config: {}
+  environ_file: /etc/default/rider.sh
+  environ: []
 
-  jetbrains:
-    home: /opt/jetbrains
-    uri: https://data.services.jetbrains.com/products/releases?latest=true&code=
-    #See https://www.jetbrains.com/help/rider/Introduction.html
-    #Default is Rider
-    product: RD
-    edition:
+  pkg:
+    name: Rider
+    use_upstream_archive: true
+    use_upstream_macapp: false
+    deps:
+      - curl
+      - tar
+      - gzip
+    repo: {}
+    suffix: tar.gz
+    macapp:
+      path: None
+    archive:
+      path: None
+      uri: 'https://data.services.jetbrains.com/products/releases?latest=true&code='
+      source_hash: None
+      enforce_toplevel: false
+      trim_output: true
+      options: '--strip-components=1'
 
-  dl:
-    archive_type: tar
-    opts: -s -L
-    interval: 60
-    retries: 1
-    source_url:
-    src_hashfile:
-    src_hashsum:
+  dir:
+    archive: /usr/local/jetbrains
+    homes: /home
+    tmp: /tmp/jetbrains/rider
+
+  identity:
+    rootuser: root
+    rootgroup: root
+    user: undefined_user
+
+  retry_option:
+    # https://docs.saltstack.com/en/latest/ref/states/requisites.html#retrying-states
+    attempts: 2
+    until: true
+    interval: 10
+    splay: 10
 
   linux:
-    symlink: /usr/bin/rider
-    #debian alternatives is disabled by default. Activated via pillar value.
+    symlink: /usr/local/bin/rider
     altpriority: 0
-
-    #On freedesktop.org-compliant desktops, enable Icon on Linux launchers.
-    #Place a .desktop file in e.g. /usr/share/applications
-    install_desktop_file: True
+    # On freedesktop.org-compliant desktops, enable Icon on Linux launchers.
+    # Place a .desktop file in e.g. /usr/share/applications
+    install_desktop_file: true
     desktop_file: /usr/share/applications/rider.desktop
-
-  prefs:
-    user:
-    group:
-    jarurl:
-    jardir:
-    jarfile: rider-settings.jar
-
