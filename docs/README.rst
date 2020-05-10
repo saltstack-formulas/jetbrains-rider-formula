@@ -1,7 +1,7 @@
 .. _readme:
 
 rider-formula
-============
+=============
 
 |img_travis| |img_sr|
 
