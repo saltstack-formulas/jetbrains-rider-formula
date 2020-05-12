@@ -17,6 +17,7 @@ rider-formula
 Formula to install Rider on GNU/Linux and MacOS.
 
 .. contents:: **Table of Contents**
+   :depth: 1
 
 General notes
 -------------
