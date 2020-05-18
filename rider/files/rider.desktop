@@ -1,8 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Name=Jetbrains Rider
-Comment=JetBrains Rider (.NET IDE)
-Icon={{ home }}/{{ command.split('.')[0] }}.png
-Exec={{ home }}/{{ command }}
-Terminal=false
-Type=Application

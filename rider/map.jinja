@@ -1,51 +1,38 @@
 # -*- coding: utf-8 -*-
 # vim: ft=jinja
 
-{% import_yaml 'rider/defaults.yaml' as defaults %}
-{% import_yaml "rider/osmap.yaml" as osmap %}
+{%- set tplroot = tpldir.split('/')[0] %}
+{%- import_yaml tplroot ~ "/defaults.yaml" as default_settings %}
+{%- import_yaml tplroot ~ "/osfamilymap.yaml" as osfamilymap %}
 
-# start with defaults, merge osmap, then pillar data
-{% set ide = salt['grains.filter_by'](
-    defaults,
-    merge=salt['grains.filter_by'](
-        osmap,
-        grain='os',
-        merge=salt['pillar.get']('rider', {}),
-    ),
-    base='rider',
-) %}
+{%- set _config = salt['config.get'](tplroot, default={}) %}
+{%- set defaults = salt['grains.filter_by'](
+      default_settings,
+      default=tplroot,
+      merge=salt['grains.filter_by']( osfamilymap, grain='os_family',
+        merge=salt['grains.filter_by']( _config, default='lookup'
+        )
+      )
+    )
+%}
+{%- set rider = salt['grains.filter_by']( {'defaults': defaults}, default='defaults', merge=_config) %}
 
-# Get user's group name from pillar or 'id' command
-{%- if not ide.prefs.group %}
-  {%- set usergroup = salt['cmd.run']('id -gn', runas=ide.prefs.user, output_loglevel='quiet',) or None %}
-  {%- do ide.prefs.update({'group': usergroup,}) %}
-{% endif %}
+{%- set pcode = rider.product ~ rider.edition if rider.edition else rider.product %}
+{%- set jdata = salt['cmd.run']('curl -s -L {0}{1}'.format(rider.pkg.archive.uri, pcode))|load_yaml %}
+{%- do rider.update({ 'version': jdata[ pcode ][0]['version'] }) %}
 
-# Get dynamic release metadata
-{%- set pcode = ide.jetbrains.product %}
-{%- if grains.os != 'MacOS' %}
-    {%- set pcode = pcode ~ ide.jetbrains.edition if ide.jetbrains.edition else pcode %}
+{%- set dirname = 'rider-%s-%s'|format( rider.edition if rider.edition else '', rider.version) %}
+{%- set url = jdata[ pcode ][0]['downloads'][ rider.flavour ]['link'] %}
+{%- set hash  = salt['cmd.run']('curl -L -s {0}'.format( jdata[ pcode ][0]['downloads'][ rider.flavour ]['checksumLink'])).split(' ')[0] %}  # noqa 204
+
+{%- if rider.pkg.use_upstream_archive %}
+       {%- do rider.pkg.archive.update({'name': rider.dir.archive ~ '/' ~ dirname,
+                                           'path': rider.dir.archive ~ '/' ~ dirname,
+                                           'source': url,
+                                           'source_hash': hash }) %}
 {%- endif %}
-{%- set jdata = salt['cmd.run']('curl {0} {1}{2}'.format(ide.dl.opts, ide.jetbrains.uri, pcode))|load_yaml %}
 
-# Extract download details
-{% set _home = '{0}/rider-{1}'.format( ide.prefix, jdata[ pcode ][0]['version']) %}
-{% if grains.os == 'MacOS' %}
-  {% set _home = '{0} {1}.app/Contents/MacOS'.format(ide.prefix, jdata[ pcode ][0]['majorVersion']) %}
-{% elif ide.jetbrains.edition %} 
-  {% set _home = '{0}/rider-{1}-{2}'.format( ide.prefix, ide.jetbrains.edition, jdata[ pcode ][0]['version']) %}
-{% endif %}
-{%- set src_hashurl = jdata[ pcode ][0]['downloads'][ ide.osflavour ]['checksumLink'] %}
-{%- set src_hashsum  = salt['cmd.run']('curl -s {0}'.format( src_hashurl )).split(' ')[0] %}
-
-# Update dynamic parameters
-{% do ide.jetbrains.update({ 'realhome': _home, 'realcmd': _home ~ ide.command },) %}
-{% do ide.dl.update({
-       'source_url'  : jdata[ pcode ][0]['downloads'][ ide.osflavour ]['link'],
-       'archive_name': jdata[ pcode ][0]['downloads'][ ide.osflavour ]['link'].split('/') | last ,
-       'src_hashurl' : src_hashurl,
-       'src_hashsum' : src_hashsum,
-       'unpack_opts' : ' -z -C ' ~  _home ~ ' --strip-components=1' },
-) %}
-{% set rider = ide %}
-
+{%- if rider.pkg.use_upstream_macapp %}
+       {%- do rider.pkg.macapp.update({
+              'name': '/Applications', 'path': '/Applications', 'source': url, 'source_hash': hash }) %}
+{%- endif %}
