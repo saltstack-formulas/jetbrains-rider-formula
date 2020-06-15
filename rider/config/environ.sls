@@ -28,7 +28,7 @@ rider-config-file-file-managed-environ_file:
     - template: jinja
     - context:
               {%- if rider.pkg.use_upstream_macapp %}
-        path: '/Applications/{{ rider.pkg.name }}{{ '\ %sE'|format(rider.edition) }}.app/Contents/MacOS'
+        path: '/Applications/{{ rider.pkg.name }}{{ '' if 'edition' not in rider else '\ %sE'|format(rider.edition) }}.app/Contents/MacOS'   # noqa 204
               {%- else %}
         path: {{ rider.pkg.archive.path }}/bin
               {%- endif %}

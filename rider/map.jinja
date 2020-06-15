@@ -15,24 +15,28 @@
       )
     )
 %}
-{%- set rider = salt['grains.filter_by']( {'defaults': defaults}, default='defaults', merge=_config) %}
+{%- set r = salt['grains.filter_by']( {'defaults': defaults}, default='defaults', merge=_config) %}
 
-{%- set pcode = rider.product ~ rider.edition if rider.edition else rider.product %}
-{%- set jdata = salt['cmd.run']('curl -s -L {0}{1}'.format(rider.pkg.archive.uri, pcode))|load_yaml %}
-{%- do rider.update({ 'version': jdata[ pcode ][0]['version'] }) %}
+{%- set edition = '' if 'edition' not in r else r.edition %}
+{%- set pcode = r.product ~ edition %}
+{%- set jdata = salt['cmd.run']('curl -s -L {0}{1}'.format(r.pkg.archive.uri, pcode))|load_yaml %}
+{%- do r.update({ 'version': jdata[ pcode ][0]['version'] }) %}
 
-{%- set dirname = 'rider-%s-%s'|format( rider.edition if rider.edition else '', rider.version) %}
-{%- set url = jdata[ pcode ][0]['downloads'][ rider.flavour ]['link'] %}
-{%- set hash  = salt['cmd.run']('curl -L -s {0}'.format( jdata[ pcode ][0]['downloads'][ rider.flavour ]['checksumLink'])).split(' ')[0] %}  # noqa 204
+{%- set dirname = 'r-%s-%s'|format( edition, r.version) %}
+{%- set url = jdata[ pcode ][0]['downloads'][ r.flavour ]['link'] %}
+{%- set hash  = salt['cmd.run']('curl -L -s {0}'.format( jdata[ pcode ][0]['downloads'][ r.flavour ]['checksumLink'])).split(' ')[0] %}  # noqa 204
 
-{%- if rider.pkg.use_upstream_archive %}
-       {%- do rider.pkg.archive.update({'name': rider.dir.archive ~ '/' ~ dirname,
-                                           'path': rider.dir.archive ~ '/' ~ dirname,
-                                           'source': url,
-                                           'source_hash': hash }) %}
+{%- if r.pkg.use_upstream_archive %}
+    {%- do r.pkg.archive.update({'name': r.dir.archive ~ '/' ~ dirname,
+                                 'path': r.dir.archive ~ '/' ~ dirname,
+                                 'source': url,
+                                 'source_hash': hash }) %}
+{%- endif %}
+{%- if r.pkg.use_upstream_macapp %}
+    {%- do r.pkg.macapp.update({'name': '/Applications',
+                                'path': '/Applications',
+                                'source': url,
+                                'source_hash': hash }) %}
 {%- endif %}
 
-{%- if rider.pkg.use_upstream_macapp %}
-       {%- do rider.pkg.macapp.update({
-              'name': '/Applications', 'path': '/Applications', 'source': url, 'source_hash': hash }) %}
-{%- endif %}
+{%- set rider = r %}

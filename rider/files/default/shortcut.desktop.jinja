@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name={{ appname }}{{ ' %sE'|format(edition) if edition else '' }}
-Comment={{ appname }}{{ ' %sE'|format(edition) if edition else '' }}
+Name={{ appname }}{{ '' if not edition else '\ %sE'|format(edition) }}
+Comment={{ appname }}{{ '' if not edition else '\ %sE'|format(edition) }}
 Icon={{ path }}/{{ command.split('.')[0] }}.png
 Exec={{ path }}/{{ command }}
 Terminal=false

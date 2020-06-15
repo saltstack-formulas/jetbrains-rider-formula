@@ -55,7 +55,7 @@ Available states
    :local:
 
 ``rider``
-^^^^^^^^^^
+^^^^^^^^^
 
 *Meta-state (This is a state that includes other states)*.
 
@@ -69,23 +69,23 @@ configures the development environment.
 This state will install Rider from archive only.
 
 ``rider.macapp``
-^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^
 
 This state will install Rider from source only.
 
 ``rider.config``
-^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^
 
 This state will configure npmrc and/or environment and has a dependency on ``rider.install``
 via include list.
 
 ``rider.linuxenv``
-^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^
 
 This state will install some Rider linux-alternatives on GNU/Linux.
 
 ``rider.clean``
-^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^
 
 *Meta-state (This is a state that includes other states)*.
 
@@ -94,25 +94,25 @@ removes the configuration file and
 then uninstalls the package.
 
 ``rider.config.clean``
-^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^
 
 This state will remove the configuration of Rider and has a
 dependency on ``rider.package.clean`` via include list.
 
 ``rider.archive.clean``
-^^^^^^^^^^^^^^^^^^^^^^^^
-
-This state will remove Rider package and has a dependency on
-``rider.config.clean`` via include list.
-
-``rider.macapp.clean``
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 This state will remove Rider package and has a dependency on
 ``rider.config.clean`` via include list.
 
+``rider.macapp.clean``
+^^^^^^^^^^^^^^^^^^^^^^
+
+This state will remove Rider package and has a dependency on
+``rider.config.clean`` via include list.
+
 ``rider.linuxenv.clean``
-^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 This state will remove Rider linux-alternatives on GNU/Linux.
 
