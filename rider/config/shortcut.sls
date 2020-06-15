@@ -28,7 +28,7 @@ rider-config-file-file-managed-desktop-shortcut_file:
     - template: jinja
     - context:
         appname: {{ rider.pkg.name }}
-        edition: {{ rider.edition|json }}
+        edition: {{ '' if 'edition' not in rider else rider.edition|json }}
         command: {{ rider.command|json }}
               {%- if rider.pkg.use_upstream_macapp %}
         path: {{ rider.pkg.macapp.path }}

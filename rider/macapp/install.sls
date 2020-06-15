@@ -55,7 +55,7 @@ rider-macos-app-install-macpackage:
     - template: jinja
     - context:
       appname: {{ rider.pkg.name }}
-      edition: {{ rider.edition }}
+      edition: {{ '' if 'edition' not in rider else rider.edition }}
       user: {{ rider.identity.user }}
       homes: {{ rider.dir.homes }}
   cmd.run:

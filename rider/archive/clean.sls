@@ -9,4 +9,4 @@ rider-package-archive-clean-file-absent:
   file.absent:
     - names:
       - {{ rider.pkg.archive.path }}
-      - /usr/local/jetbrains/rider-{{ rider.edition }}-*
+      - /usr/local/jetbrains/rider-*

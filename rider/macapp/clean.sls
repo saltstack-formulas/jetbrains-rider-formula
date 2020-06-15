@@ -10,7 +10,7 @@ rider-macos-app-clean-files:
   file.absent:
     - names:
       - {{ rider.dir.tmp }}
-      - /Applications/{{ rider.pkg.name }}{{ ' %sE'|format(rider.edition) if rider.edition else '' }}.app
+      - /Applications/{{ rider.pkg.name }}{{ '' if 'edition' not in rider else '\ %sE'|format(rider.edition) }}.app
 
     {%- else %}
 
