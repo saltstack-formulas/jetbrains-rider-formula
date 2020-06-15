@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.0.1](https://github.com/saltstack-formulas/jetbrains-rider-formula/compare/v1.0.0...v1.0.1) (2020-06-15)
+
+
+### Bug Fixes
+
+* **edition:** better edition jinja code ([ef93437](https://github.com/saltstack-formulas/jetbrains-rider-formula/commit/ef934370c91bd4ba7bd48f7a458f50ba524062a9))
+
+
+### Continuous Integration
+
+* **kitchen+travis:** add new platforms [skip ci] ([9ea7137](https://github.com/saltstack-formulas/jetbrains-rider-formula/commit/9ea7137aa076b6739cc0c672ad95d2f18b977e88))
+* **travis:** add notifications => zulip [skip ci] ([89c56b8](https://github.com/saltstack-formulas/jetbrains-rider-formula/commit/89c56b855fba5836a93af941cf1418fc128cd55f))
+
+
+### Documentation
+
+* **readme:** updated formatting ([0af6a34](https://github.com/saltstack-formulas/jetbrains-rider-formula/commit/0af6a346afc9cbad6d21f35f92a58c9d83c2bce4))
+
 # [1.0.0](https://github.com/saltstack-formulas/jetbrains-rider-formula/compare/v0.2.0...v1.0.0) (2020-05-18)
 
 
