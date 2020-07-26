@@ -11,7 +11,8 @@ rider-package-archive-install:
     - require_in:
       - file: rider-package-archive-install
   file.directory:
-    - name: {{ rider.pkg.archive.path }}
+    - unless: {{ grains.os == 'MacOS' }}
+    - name: {{ rider.dir.path }}
     - user: {{ rider.identity.rootuser }}
     - group: {{ rider.identity.rootgroup }}
     - mode: 755
@@ -39,7 +40,7 @@ rider-package-archive-install:
 rider-archive-install-file-symlink-rider:
   file.symlink:
     - name: /usr/local/bin/rider
-    - target: {{ rider.pkg.archive.path }}/{{ rider.command }}
+    - target: {{ rider.dir.path }}/{{ rider.command }}
     - force: True
     - onlyif: {{ grains.kernel|lower != 'windows' }}
     - require:

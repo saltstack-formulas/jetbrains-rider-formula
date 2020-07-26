@@ -24,17 +24,17 @@ rider:
       - gzip
     repo: {}
     suffix: tar.gz
-    macapp:
-      path: null
+    uri: 'https://data.services.jetbrains.com/products/releases?latest=true&code='
+    macapp: {}
     archive:
-      path: null
-      uri: 'https://data.services.jetbrains.com/products/releases?latest=true&code='
+      name: null
       source_hash: null
       enforce_toplevel: false
       trim_output: true
       options: '--strip-components=1'
 
   dir:
+    path: null
     archive: /usr/local/jetbrains
     homes: /home
     tmp: /tmp/jetbrains/rider

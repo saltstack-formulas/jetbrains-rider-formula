@@ -54,10 +54,14 @@ rider-macos-app-install-macpackage:
     - mode: 755
     - template: jinja
     - context:
-      appname: {{ rider.pkg.name }}
+      appname: {{ rider.dir.path }}/{{ rider.pkg.name }}
       edition: {{ '' if 'edition' not in rider else rider.edition }}
       user: {{ rider.identity.user }}
       homes: {{ rider.dir.homes }}
+    - require:
+      - macpackage: rider-macos-app-install-macpackage
+    - onchanges:
+      - macpackage: rider-macos-app-install-macpackage
   cmd.run:
     - name: /tmp/mac_shortcut.sh
     - runas: {{ rider.identity.user }}

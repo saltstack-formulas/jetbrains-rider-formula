@@ -1,7 +1,8 @@
+{%- set path = '%s%s'.format(appname, ' %sE'|format(edition) if edition is defined and edition else '') %}
 [Desktop Entry]
 Encoding=UTF-8
-Name={{ appname }}{{ '' if not edition else '\ %sE'|format(edition) }}
-Comment={{ appname }}{{ '' if not edition else '\ %sE'|format(edition) }}
+Name={{ path }}
+Comment={{ path }}
 Icon={{ path }}/{{ command.split('.')[0] }}.png
 Exec={{ path }}/{{ command }}
 Terminal=false

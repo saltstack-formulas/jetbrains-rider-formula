@@ -10,8 +10,8 @@
 rider-linuxenv-home-file-symlink:
   file.symlink:
     - name: /opt/rider
-    - target: {{ rider.pkg.archive.path }}
-    - onlyif: test -d '{{ rider.pkg.archive.path }}'
+    - target: {{ rider.dir.path }}
+    - onlyif: test -d '{{ rider.dir.path }}'
     - force: True
 
         {% if rider.linux.altpriority|int > 0 and grains.os_family not in ('Arch',) %}
@@ -20,14 +20,14 @@ rider-linuxenv-home-alternatives-install:
   alternatives.install:
     - name: riderhome
     - link: /opt/rider
-    - path: {{ rider.pkg.archive.path }}
+    - path: {{ rider.dir.path }}
     - priority: {{ rider.linux.altpriority }}
     - retry: {{ rider.retry_option|json }}
 
 rider-linuxenv-home-alternatives-set:
   alternatives.set:
     - name: riderhome
-    - path: {{ rider.pkg.archive.path }}
+    - path: {{ rider.dir.path }}
     - onchanges:
       - alternatives: rider-linuxenv-home-alternatives-install
     - retry: {{ rider.retry_option|json }}
@@ -36,7 +36,7 @@ rider-linuxenv-executable-alternatives-install:
   alternatives.install:
     - name: rider
     - link: {{ rider.linux.symlink }}
-    - path: {{ rider.pkg.archive.path }}/{{ rider.command }}
+    - path: {{ rider.dir.path }}/{{ rider.command }}
     - priority: {{ rider.linux.altpriority }}
     - require:
       - alternatives: rider-linuxenv-home-alternatives-install
@@ -46,7 +46,7 @@ rider-linuxenv-executable-alternatives-install:
 rider-linuxenv-executable-alternatives-set:
   alternatives.set:
     - name: rider
-    - path: {{ rider.pkg.archive.path }}/{{ rider.command }}
+    - path: {{ rider.dir.path }}/{{ rider.command }}
     - onchanges:
       - alternatives: rider-linuxenv-executable-alternatives-install
     - retry: {{ rider.retry_option|json }}
