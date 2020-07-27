@@ -8,9 +8,9 @@
 rider-package-archive-clean-file-absent:
   file.absent:
     - names:
-            {%- if grains.os == 'MacOS' %}
-      - {{ rider.dir.path }}/{{ rider.pkg.name }}*{{ rider.edition }}
-            {%- else %} 
+      - {{ rider.dir.tmp }}
+                  {%- if grains.os == 'MacOS' %}
+      - {{ rider.dir.path }}/{{ rider.pkg.name }}*{{ rider.edition }}*.app
+                  {%- else %}
       - {{ rider.dir.path }}
-            {%- endif %} 
-      - /usr/local/jetbrains/rider-*
+                  {%- endif %}

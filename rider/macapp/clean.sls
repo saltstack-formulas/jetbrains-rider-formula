@@ -4,19 +4,23 @@
     {%- if grains.os_family == 'MacOS' %}
 
 {%- set tplroot = tpldir.split('/')[0] %}
-{%- from tplroot ~ "/map.jinja" import rider as r with context %}
+{%- from tplroot ~ "/map.jinja" import rider with context %}
 
-r-macos-app-clean-files:
+rider-macos-app-clean-files:
   file.absent:
     - names:
-      - {{ r.dir.tmp }}
-      - {{ r.dir.path }}/{{ r.pkg.name }}{{ '' if 'edition' not in r else ' %sE'|format(r.edition) }}.app
+      - {{ rider.dir.tmp }}
+                  {%- if grains.os == 'MacOS' %}
+      - {{ rider.dir.path }}/{{ rider.pkg.name }}*{{ rider.edition }}*.app
+                  {%- else %}
+      - {{ rider.dir.path }}
+                  {%- endif %}
 
     {%- else %}
 
-r-macos-app-clean-unavailable:
+rider-macos-app-clean-unavailable:
   test.show_notification:
     - text: |
-        The r macpackage is only available on MacOS
+        The rider macpackage is only available on MacOS
 
     {%- endif %}

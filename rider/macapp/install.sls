@@ -49,13 +49,13 @@ rider-macos-app-install-macpackage:
     - onchanges:
       - cmd: rider-macos-app-install-curl
   file.managed:
-    - name: /tmp/mac_shortcut.sh
-    - source: salt://rider/files/mac_shortcut.sh
+    - name: /tmp/mac_shortcut.sh.jinja
+    - source: salt://rider/files/mac_shortcut.sh.jinja
     - mode: 755
     - template: jinja
     - context:
       appname: {{ rider.dir.path }}/{{ rider.pkg.name }}
-      edition: {{ '' if 'edition' not in rider else rider.edition }}
+      edition: {{ '' if not rider.edition else ' %sE'|format(rider.edition) }}
       user: {{ rider.identity.user }}
       homes: {{ rider.dir.homes }}
     - require:
@@ -63,7 +63,7 @@ rider-macos-app-install-macpackage:
     - onchanges:
       - macpackage: rider-macos-app-install-macpackage
   cmd.run:
-    - name: /tmp/mac_shortcut.sh
+    - name: /tmp/mac_shortcut.sh.jinja
     - runas: {{ rider.identity.user }}
     - require:
       - file: rider-macos-app-install-macpackage

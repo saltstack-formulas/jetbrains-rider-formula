@@ -27,14 +27,15 @@ rider-config-file-file-managed-desktop-shortcut_file:
     - makedirs: True
     - template: jinja
     - context:
-        edition: {{ '' if 'edition' not in rider else rider.edition|json }}
-        command: {{ rider.command|json }}
-                            {%- if grains.os == 'MacOS' %}
-        appname: {{ rider.dir.path }}/{{ rider.pkg.name }}
-                            {%- else %}
-        appname: {{ rider.dir.path }}
-    - onlyif: test -f {{ rider.dir.path }}/{{ rider.command }}
-                            {%- endif %}
+      command: {{ rider.command|json }}
+                        {%- if grains.os == 'MacOS' %}
+      edition: {{ '' if 'edition' not in rider else rider.edition|json }}
+      appname: {{ rider.dir.path }}/{{ rider.pkg.name }}
+                        {%- else %}
+      edition: ''
+      appname: {{ rider.dir.path }}
+    - onlyif: test -f "{{ rider.dir.path }}/{{ rider.command }}"
+                        {%- endif %}
     - require:
       - sls: {{ sls_package_install }}
 

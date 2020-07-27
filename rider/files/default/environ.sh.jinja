@@ -2,6 +2,7 @@
 # File managed by Salt at <{{ source }}>.
 # Your changes may be overwritten.
 ########################################################################
+{%- set path = '%s%s'.format(appname, edition) %}
 
 export PATH=${PATH}:{{ path }}
 {{ '' if not environ else environ|yaml(False) }}

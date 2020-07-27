@@ -26,7 +26,7 @@ rider-config-clean-file-absent:
                {%- if grains.kernel|lower == 'linux' %}
       - {{ rider.linux.desktop_file }}
                {%- elif grains.os == 'MacOS' %}
-      - {{ rider.dir.homes }}/{{ rider.identity.user }}/Desktop/{{ rider.pkg.name }}{{ '' if 'edition' not in rider else ' %sE'|format(rider.edition) }}  # noqa 204
+      - {{ rider.dir.homes }}/{{ rider.identity.user }}/Desktop/{{ rider.pkg.name }}*{{ rider.edition }}*
                {%- endif %}
     - require:
       - sls: {{ sls_package_clean }}

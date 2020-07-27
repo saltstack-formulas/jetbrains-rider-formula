@@ -2,10 +2,10 @@
 # vim: ft=sls
 
 {%- set tplroot = tpldir.split('/')[0] %}
-{%- from tplroot ~ "/map.jinja" import rider as r with context %}
+{%- from tplroot ~ "/map.jinja" import rider with context %}
 {%- from tplroot ~ "/libtofs.jinja" import files_switch with context %}
 
-    {%- if r.pkg.use_upstream_macapp %}
+    {%- if rider.pkg.use_upstream_macapp %}
         {%- set sls_package_install = tplroot ~ '.macapp.install' %}
     {%- else %}
         {%- set sls_package_install = tplroot ~ '.archive.install' %}
@@ -14,24 +14,26 @@
 include:
   - {{ sls_package_install }}
 
-r-config-file-file-managed-environ_file:
+rider-config-file-file-managed-environ_file:
   file.managed:
-    - name: {{ r.environ_file }}
+    - name: {{ rider.environ_file }}
     - source: {{ files_switch(['environ.sh.jinja'],
-                              lookup='r-config-file-file-managed-environ_file'
+                              lookup='rider-config-file-file-managed-environ_file'
                  )
               }}
     - mode: 644
-    - user: {{ r.identity.rootuser }}
-    - group: {{ r.identity.rootgroup }}
+    - user: {{ rider.identity.rootuser }}
+    - group: {{ rider.identity.rootgroup }}
     - makedirs: True
     - template: jinja
     - context:
-              {%- if r.pkg.use_upstream_macapp %}
-        path: '{{ r.dir.path }}/{{ r.pkg.name }}{{ '' if 'edition' not in r else ' %sE'|format(r.edition) }}.app/Contents/MacOS'   # noqa 204
-              {%- else %}
-        path: {{ r.dir.path }}/bin
-              {%- endif %}
-        environ: {{ r.environ|json }}
+      environ: {{ rider.environ|json }}
+                      {%- if rider.pkg.use_upstream_macapp %}
+      edition:  {{ '' if not rider.edition else ' %sE'|format(rider.edition) }}.app/Contents/MacOS
+      appname: {{ rider.dir.path }}/{{ rider.pkg.name }}
+                      {%- else %}
+      edition: ''
+      appname: {{ rider.dir.path }}/bin
+                      {%- endif %}
     - require:
       - sls: {{ sls_package_install }}
