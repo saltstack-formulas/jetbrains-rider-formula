@@ -15,7 +15,9 @@ rider-macos-app-install-curl:
     - name: curl
   cmd.run:
     - name: curl -Lo {{ rider.dir.tmp }}/rider-{{ rider.version }} "{{ rider.pkg.macapp.source }}"
-    - unless: test -f {{ rider.dir.tmp }}/rider-{{ rider.version }}
+    - unless:
+      - test -f {{ rider.dir.tmp }}/rider-{{ rider.version }}
+      - test -d {{ rider.dir.path }}/{{ rider.pkg.name }}{{ '' if not rider.edition else ' %sE'|format(rider.edition) }}  # noqa 204
     - require:
       - file: rider-macos-app-install-curl
       - pkg: rider-macos-app-install-curl
