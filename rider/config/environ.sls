@@ -27,11 +27,13 @@ rider-config-file-file-managed-environ_file:
     - makedirs: True
     - template: jinja
     - context:
-              {%- if rider.pkg.use_upstream_macapp %}
-        path: '/Applications/{{ rider.pkg.name }}{{ '' if 'edition' not in rider else '\ %sE'|format(rider.edition) }}.app/Contents/MacOS'   # noqa 204
-              {%- else %}
-        path: {{ rider.pkg.archive.path }}/bin
-              {%- endif %}
-        environ: {{ rider.environ|json }}
+      environ: {{ rider.environ|json }}
+                      {%- if rider.pkg.use_upstream_macapp %}
+      edition:  {{ '' if not rider.edition else ' %sE'|format(rider.edition) }}.app/Contents/MacOS
+      appname: {{ rider.dir.path }}/{{ rider.pkg.name }}
+                      {%- else %}
+      edition: ''
+      appname: {{ rider.dir.path }}/bin
+                      {%- endif %}
     - require:
       - sls: {{ sls_package_install }}

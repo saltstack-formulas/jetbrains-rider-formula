@@ -11,21 +11,21 @@ rider-linuxenv-home-file-absent:
   file.absent:
     - names:
       - /opt/rider
-      - {{ rider.pkg.archive.path }}
+      - {{ rider.dir.path }}
 
         {% if rider.linux.altpriority|int > 0 and grains.os_family not in ('Arch',) %}
 
 rider-linuxenv-home-alternatives-clean:
   alternatives.remove:
     - name: riderhome
-    - path: {{ rider.pkg.archive.path }}
+    - path: {{ rider.dir.path }}
     - onlyif: update-alternatives --get-selections |grep ^riderhome
 
 
 rider-linuxenv-executable-alternatives-clean:
   alternatives.remove:
     - name: rider
-    - path: {{ rider.pkg.archive.path }}/rider
+    - path: {{ rider.dir.path }}/{{ rider.command }}
     - onlyif: update-alternatives --get-selections |grep ^rider
 
         {%- else %}

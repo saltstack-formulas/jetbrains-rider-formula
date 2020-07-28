@@ -28,12 +28,7 @@ rider-config-file-managed-config_file:
     - makedirs: True
     - template: jinja
     - context:
-              {%- if rider.pkg.use_upstream_macapp %}
-        path: {{ rider.pkg.macapp.path }}
-              {%- else %}
-        path: {{ rider.pkg.archive.path }}
-              {%- endif %}
-        config: {{ rider.config|json }}
+      config: {{ rider.config|json }}
     - require:
       - sls: {{ sls_package_install }}
 

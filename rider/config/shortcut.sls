@@ -5,19 +5,15 @@
 {%- from tplroot ~ "/map.jinja" import rider with context %}
 {%- from tplroot ~ "/libtofs.jinja" import files_switch with context %}
 
-{%- if rider.linux.install_desktop_file and grains.os not in ('MacOS',) %}
-       {%- if rider.pkg.use_upstream_macapp %}
-           {%- set sls_package_install = tplroot ~ '.macapp.install' %}
-       {%- else %}
-           {%- set sls_package_install = tplroot ~ '.archive.install' %}
-       {%- endif %}
+{%- if rider.shortcut.install and grains.kernel|lower == 'linux' %}
+    {%- set sls_package_install = tplroot ~ '.archive.install' %}
 
 include:
   - {{ sls_package_install }}
 
 rider-config-file-file-managed-desktop-shortcut_file:
   file.managed:
-    - name: {{ rider.linux.desktop_file }}
+    - name: {{ rider.shortcut.file }}
     - source: {{ files_switch(['shortcut.desktop.jinja'],
                               lookup='rider-config-file-file-managed-desktop-shortcut_file'
                  )
@@ -27,16 +23,15 @@ rider-config-file-file-managed-desktop-shortcut_file:
     - makedirs: True
     - template: jinja
     - context:
-        appname: {{ rider.pkg.name }}
-        edition: {{ '' if 'edition' not in rider else rider.edition|json }}
-        command: {{ rider.command|json }}
-              {%- if rider.pkg.use_upstream_macapp %}
-        path: {{ rider.pkg.macapp.path }}
-    - onlyif: test -f "{{ rider.pkg.macapp.path }}/{{ rider.command }}"
-              {%- else %}
-        path: {{ rider.pkg.archive.path }}
-    - onlyif: test -f {{ rider.pkg.archive.path }}/{{ rider.command }}
-              {%- endif %}
+      command: {{ rider.command|json }}
+                        {%- if grains.os == 'MacOS' %}
+      edition: {{ '' if 'edition' not in rider else rider.edition|json }}
+      appname: {{ rider.dir.path }}/{{ rider.pkg.name }}
+                        {%- else %}
+      edition: ''
+      appname: {{ rider.dir.path }}
+    - onlyif: test -f "{{ rider.dir.path }}/{{ rider.command }}"
+                        {%- endif %}
     - require:
       - sls: {{ sls_package_install }}
 
