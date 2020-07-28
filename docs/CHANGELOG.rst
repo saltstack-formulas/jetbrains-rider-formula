@@ -2,6 +2,44 @@
 Changelog
 =========
 
+`1.0.2 <https://github.com/saltstack-formulas/jetbrains-rider-formula/compare/v1.0.1...v1.0.2>`_ (2020-07-28)
+-----------------------------------------------------------------------------------------------------------------
+
+Bug Fixes
+^^^^^^^^^
+
+
+* **cmd.run:** wrap url in quotes (zsh) (\ `cfb5bba <https://github.com/saltstack-formulas/jetbrains-rider-formula/commit/cfb5bba642f978cb27d5970651421626587f6387>`_\ )
+* **macos:** correct syntax (\ `e6e8cea <https://github.com/saltstack-formulas/jetbrains-rider-formula/commit/e6e8ceab64026d3d31f651f5408ab319b5c9a31f>`_\ )
+* **macos:** do not create shortcut file (\ `5f2228e <https://github.com/saltstack-formulas/jetbrains-rider-formula/commit/5f2228e530d0c483dd3339cf332f15da79fc69a5>`_\ )
+* **macos:** do not create shortcut file (\ `42a7b88 <https://github.com/saltstack-formulas/jetbrains-rider-formula/commit/42a7b889dda10f9cabdae81e01cb2fad411c608d>`_\ )
+* **macos:** do not create shortcut file (\ `b07e7ba <https://github.com/saltstack-formulas/jetbrains-rider-formula/commit/b07e7badf3013620a864f9166c5bf449825e7cb2>`_\ )
+
+Code Refactoring
+^^^^^^^^^^^^^^^^
+
+
+* **jetbrains:** align jetbrains formulas (\ `00c7967 <https://github.com/saltstack-formulas/jetbrains-rider-formula/commit/00c79672fedae7eeb2dc0ed2c8b35121dc78e584>`_\ )
+* **path:** consistent path vars (\ `7a53c74 <https://github.com/saltstack-formulas/jetbrains-rider-formula/commit/7a53c74486c8f27f971202783c40491f6ebc41a3>`_\ )
+
+Continuous Integration
+^^^^^^^^^^^^^^^^^^^^^^
+
+
+* **kitchen:** use ``saltimages`` Docker Hub where available [skip ci] (\ `f3c358f <https://github.com/saltstack-formulas/jetbrains-rider-formula/commit/f3c358f7b075fe9c3a2ed7a9cbd43422f3e1fd46>`_\ )
+
+Documentation
+^^^^^^^^^^^^^
+
+
+* **readme:** minor update (\ `e448d06 <https://github.com/saltstack-formulas/jetbrains-rider-formula/commit/e448d069771c7e9b67dbd04ab080630c6356e2d3>`_\ )
+
+Styles
+^^^^^^
+
+
+* **libtofs.jinja:** use Black-inspired Jinja formatting [skip ci] (\ `ef0024d <https://github.com/saltstack-formulas/jetbrains-rider-formula/commit/ef0024db97eacf3840102498f2573403ea690834>`_\ )
+
 `1.0.1 <https://github.com/saltstack-formulas/jetbrains-rider-formula/compare/v1.0.0...v1.0.1>`_ (2020-06-15)
 -----------------------------------------------------------------------------------------------------------------
 
