@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-{%- set appname = '%s%s'|format(appname, '' if not edition else edition) %}
+{%- set appname = '%s%s'|format(appname, '' if not edition else ' ' ~ edition)|replace(' ','\ ') %}
 
 Source={{ appname }}.app
 Destination="{{ homes }}/{{ user }}/Desktop"
