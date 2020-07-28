@@ -5,12 +5,8 @@
 {%- from tplroot ~ "/map.jinja" import rider with context %}
 {%- from tplroot ~ "/libtofs.jinja" import files_switch with context %}
 
-{%- if rider.shortcut.file %}
-    {%- if rider.pkg.use_upstream_macapp %}
-        {%- set sls_package_install = tplroot ~ '.macapp.install' %}
-    {%- else %}
-        {%- set sls_package_install = tplroot ~ '.archive.install' %}
-    {%- endif %}
+{%- if rider.shortcut.install and grains.kernel|lower == 'linux' %}
+    {%- set sls_package_install = tplroot ~ '.archive.install' %}
 
 include:
   - {{ sls_package_install }}
