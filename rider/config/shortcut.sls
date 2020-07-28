@@ -5,7 +5,7 @@
 {%- from tplroot ~ "/map.jinja" import rider with context %}
 {%- from tplroot ~ "/libtofs.jinja" import files_switch with context %}
 
-{%- if rider.linux.install_desktop_file %}
+{%- if rider.shortcut.file %}
     {%- if rider.pkg.use_upstream_macapp %}
         {%- set sls_package_install = tplroot ~ '.macapp.install' %}
     {%- else %}
@@ -17,7 +17,7 @@ include:
 
 rider-config-file-file-managed-desktop-shortcut_file:
   file.managed:
-    - name: {{ rider.linux.desktop_file }}
+    - name: {{ rider.shortcut.file }}
     - source: {{ files_switch(['shortcut.desktop.jinja'],
                               lookup='rider-config-file-file-managed-desktop-shortcut_file'
                  )

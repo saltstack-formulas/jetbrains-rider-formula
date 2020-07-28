@@ -39,3 +39,6 @@ MacOS:
     use_upstream_macapp: true
     use_upstream_archive: false
     suffix : dmg
+  shortcut:
+    install: false
+    file: /Users/{{ macos_rootuser | d('') }}/Rider

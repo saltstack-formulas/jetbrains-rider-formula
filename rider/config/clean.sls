@@ -24,7 +24,7 @@ rider-config-clean-file-absent:
       - {{ rider.environ_file }}
                {%- endif %}
                {%- if grains.kernel|lower == 'linux' %}
-      - {{ rider.linux.desktop_file }}
+      - {{ rider.shortcut.file }}
                {%- elif grains.os == 'MacOS' %}
       - {{ rider.dir.homes }}/{{ rider.identity.user }}/Desktop/{{ rider.pkg.name }}*{{ rider.edition }}*
                {%- endif %}
