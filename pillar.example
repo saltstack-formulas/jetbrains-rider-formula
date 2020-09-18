@@ -2,6 +2,7 @@
 # vim: ft=yaml
 ---
 rider:
+  flavour: linux   # linux (default), mac (default), windowsWeb (default)
   environ:
     a: b
   pkg:
