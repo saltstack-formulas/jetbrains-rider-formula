@@ -1,5 +1,13 @@
 # Changelog
 
+# [1.2.0](https://github.com/saltstack-formulas/jetbrains-rider-formula/compare/v1.1.0...v1.2.0) (2020-09-20)
+
+
+### Features
+
+* **clean:** add windows support ([acd6eaf](https://github.com/saltstack-formulas/jetbrains-rider-formula/commit/acd6eaf925ebf475a064b77f1c2286a563cdd29f))
+* **windows:** basic windows support ([a44ca28](https://github.com/saltstack-formulas/jetbrains-rider-formula/commit/a44ca281592dee8a1eb254b705af424f38907061))
+
 # [1.1.0](https://github.com/saltstack-formulas/jetbrains-rider-formula/compare/v1.0.2...v1.1.0) (2020-09-20)
 
 
