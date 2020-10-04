@@ -42,6 +42,10 @@ Contributing to this repo
 
 Please see `How to contribute <https://github.com/saltstack-formulas/.github/blob/master/CONTRIBUTING.rst>`_ for more details.
 
+Special notes
+-------------
+
+None.
 
 Available states
 ----------------
