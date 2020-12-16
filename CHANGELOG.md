@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.2.1](https://github.com/saltstack-formulas/jetbrains-rider-formula/compare/v1.2.0...v1.2.1) (2020-12-16)
+
+
+### Continuous Integration
+
+* **gitlab-ci:** use GitLab CI as Travis CI replacement ([8e26a96](https://github.com/saltstack-formulas/jetbrains-rider-formula/commit/8e26a96cb00ebc829c8162b9c3b02e9c254bd7da))
+* **pre-commit:** add to formula [skip ci] ([8e7cc2e](https://github.com/saltstack-formulas/jetbrains-rider-formula/commit/8e7cc2e52c5e759534bff786280948e770fab63f))
+* **pre-commit:** enable/disable `rstcheck` as relevant [skip ci] ([cc0d0c3](https://github.com/saltstack-formulas/jetbrains-rider-formula/commit/cc0d0c3f46834f625e987c38d167a4661d057714))
+* **pre-commit:** finalise `rstcheck` configuration [skip ci] ([ded370b](https://github.com/saltstack-formulas/jetbrains-rider-formula/commit/ded370b94903a7c9a6c8ad41ac339d3e3e34b458))
+
+
+### Documentation
+
+* **readme:** fix `rstcheck` violation [skip ci] ([e89a334](https://github.com/saltstack-formulas/jetbrains-rider-formula/commit/e89a3341d00b45d2277ad18ecb3d09a69cf04f49)), closes [/travis-ci.org/github/myii/jetbrains-rider-formula/builds/731607162#L259](https://github.com//travis-ci.org/github/myii/jetbrains-rider-formula/builds/731607162/issues/L259)
+
 # [1.2.0](https://github.com/saltstack-formulas/jetbrains-rider-formula/compare/v1.1.0...v1.2.0) (2020-09-20)
 
 
